@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class YellowState : TrafficLightStateBaseClass
 {
-    public override void StartTheState(MeshRenderer renderer, float time)
+    public override void InitState(MeshRenderer renderer, float time)
     {
-        color = Color.yellow;
+        Color = Color.yellow;
         
-        base.renderer = renderer;
+        base.Renderer = renderer;
 
-        base.time = time;
+        base.Time = time;
     }
 }

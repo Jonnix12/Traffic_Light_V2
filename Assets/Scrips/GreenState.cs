@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class GreenState : TrafficLightStateBaseClass
 {
-    public override void StartTheState(MeshRenderer renderer, float time)
+    public override void InitState(MeshRenderer renderer, float time)
     {
-        color = Color.green;
+        Color = Color.green;
         
-        base.renderer = renderer;
+        base.Renderer = renderer;
 
-        base.time = time;
+        base.Time = time;
     }
 }
