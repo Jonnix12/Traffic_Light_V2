@@ -61,7 +61,7 @@ public class TrafficLightManager : MonoBehaviour
         StartCoroutine(_currentState.DelayForLight(_currentState,this));
     }
 
-    [ContextMenu("End")]
+    [ContextMenu("Stop")]
     public void SetOff()
     {
         _isWorking = false;
