@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrafficLightManager : MonoBehaviour
 {
-    private TrafficLightStateBaseClass currentState;
+    private TrafficLightStateBaseClass _currentState;
 
     private readonly TrafficLightStateBaseClass[] _states = {
         new RedState(),new YellowState(), new GreenState()
@@ -19,6 +19,8 @@ public class TrafficLightManager : MonoBehaviour
     [SerializeField] private float _greenTime;
 
     private int _currentStateIndex = 0;
+
+    private bool _isWorking = false;
     
     void Start()
     {
@@ -26,13 +28,18 @@ public class TrafficLightManager : MonoBehaviour
         _states[1].StartTheState(_yellowLight,_yellowTime);
         _states[2].StartTheState(_greenLight,_greenTime);
         
-        currentState = _states[_currentStateIndex];
-        StartCoroutine(currentState.DelayForLight(currentState,this));
+        if (_isWorking)
+        {
+            _currentState = _states[_currentStateIndex];
+            StartCoroutine(_currentState.DelayForLight(_currentState,this));
+        }
     }
 
     
     public void NextState()
     {
+        if(!_isWorking) return;
+        
         if (_currentStateIndex >= 2)
         {
             _currentStateIndex = 0;
@@ -42,7 +49,31 @@ public class TrafficLightManager : MonoBehaviour
             _currentStateIndex++;
         }
 
-        currentState = _states[_currentStateIndex];
-        StartCoroutine(currentState.DelayForLight(currentState,this));
+        _currentState = _states[_currentStateIndex];
+        StartCoroutine(_currentState.DelayForLight(_currentState,this));
+    }
+
+    [ContextMenu("Start")]
+    public void SetOn()
+    {
+        _isWorking = true;
+        _currentState = _states[_currentStateIndex];
+        StartCoroutine(_currentState.DelayForLight(_currentState,this));
+    }
+
+    [ContextMenu("End")]
+    public void SetOff()
+    {
+        _isWorking = false;
+        ResetBody();
+    }
+
+    private void ResetBody()
+    {
+        _redLight.material.color = Color.white;
+        _yellowLight.material.color = Color.white;
+        _greenLight.material.color = Color.white;
+        _currentStateIndex = 0;
+        StopAllCoroutines();
     }
 }
