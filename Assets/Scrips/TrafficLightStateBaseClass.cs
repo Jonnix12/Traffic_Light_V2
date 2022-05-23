@@ -1,26 +1,22 @@
 using System.Collections;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class TrafficLightStateBaseClass
 {
-   protected Color Color;
+   [SerializeField] protected Color color;
 
-   protected MeshRenderer Renderer;
+   [SerializeField] protected MeshRenderer renderer;
 
-   protected float Time;
+   [SerializeField] protected float time;
    
-   public abstract void InitState(MeshRenderer renderer, float time);
-
    //A coroutine that set the light to the correct color and set it off after the set time
-   public IEnumerator DelayForLight(TrafficLightStateBaseClass state,TrafficLightManager manager)
+   public virtual IEnumerator DelayForLight()
    {
-      var materialLight = state.Renderer.material;//set the current material state
-      
-      materialLight.color = state.Color;
-      yield return new WaitForSeconds(state.Time);//wait
+      var materialLight = renderer.material;//set the current material state
+      materialLight.color = color;
+      yield return new WaitForSeconds(time);//wait
       materialLight.color = Color.white;
-      
-      manager.NextState();//call the next state 
    }
    
 }
